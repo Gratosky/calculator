@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="calculator">
+      <div id="display">0</div>
+      <div class="buttons">
+        <button class="calc-btn">0</button>
+        <button class="calc-btn">1</button>
+        <button class="calc-btn">2</button>
+        <button class="calc-btn">3</button>
+        <button class="calc-btn">4</button>
+        <button class="calc-btn">5</button>
+        <button class="calc-btn">6</button>
+        <button class="calc-btn">7</button>
+        <button class="calc-btn">8</button>
+        <button class="calc-btn">9</button>
+        <button class="calc-btn operator">/</button>
+        <button class="calc-btn operator">-</button>
+        <button class="calc-btn operator">*</button>
+        <button class="calc-btn operator">+</button>
+        <button class="calc-btn clear">C</button>
+        <button class="calc-btn equals">=</button>
+      </div>
+    </div>
+
+    <script>
+      function add(a, b) {
+        return a + b;
+      }
+      console.log(add(4, 8));
+
+      function subtract(a, b) {
+        return a - b;
+      }
+      console.log(subtract(12, 6));
+
+      function multiply(a, b) {
+        return a * b;
+      }
+      console.log(multiply(2, 4));
+
+      function divide(a, b) {
+        return a / b;
+      }
+      console.log(divide(24, 8));
+
+      let first = "";
+      let last = "";
+      let operator = "";
+
+      function operate(num1, op, num2) {
+        const PLUS = "+";
+        const MINUS = "-";
+        const TIMES = "*";
+        const DIVIDE = "/";
+
+        const number1 = parseFloat(num1);
+        const number2 = parseFloat(num2);
+
+        if (isNaN(number1) || isNaN(number2)) {
+          console.error("Operate function received invalid numbers.");
+          return "Error";
+        }
+
+        if (op === DIVIDE && number2 === 0) {
+          console.error(`Attempted to divide by zero.`);
+          return `Error: Cannot divide by 0`;
+        }
+
+        if (op === PLUS) {
+          return add(number1, number2);
+        } else if (op === MINUS) {
+          return subtract(number1, number2);
+        } else if (op === TIMES) {
+          return multiply(number1, number2);
+        } else if (op === DIVIDE) {
+          return divide(number1, number2);
+        } else {
+          console.error(`Unknown operator: '${op}'`);
+          return `Error: Invalid Operator`;
+        }
+
+        return `${first} + ${operator} + ${last}`;
+      }
+      console.log(operate("20", "/", "10"));
+    </script>
+  </body>
+</html>
