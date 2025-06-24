@@ -164,14 +164,16 @@
             }
           }
 
-          if (operator === "") {
-            if (result !== null) {
-              firstValue = "";
-              operator = "";
-              lastValue = "";
-              updateDisplay(firstValue + " " + operator + " " + lastValue);
-            }
+          if (result !== null && !button.classList.contains("operator")) {
+            // If there's a result and we're pressing a number, start fresh
+            clearCalculator();
+            firstValue = buttonText;
+            updateDisplay(firstValue);
+            result = null;
+            return;
+          }
 
+          if (operator === "") {
             firstValue += buttonText;
             updateDisplay(firstValue);
           } else {
