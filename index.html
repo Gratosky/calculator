@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      #display {
+        width: 200px;
+        height: 60px;
+        background-color: grey;
+      }
+    </style>
   </head>
   <body>
     <div class="calculator">
@@ -29,6 +36,14 @@
     </div>
 
     <script>
+      const calcBtns = document.querySelectorAll(".calc-btn");
+      const display = document.getElementById("display");
+
+      let firstValue = "";
+      let lastValue = "";
+      let operator = "";
+      let result = null;
+
       function add(a, b) {
         return a + b;
       }
@@ -49,16 +64,7 @@
       }
       console.log(divide(24, 8));
 
-      let first = "";
-      let last = "";
-      let operator = "";
-
       function operate(num1, op, num2) {
-        const PLUS = "+";
-        const MINUS = "-";
-        const TIMES = "*";
-        const DIVIDE = "/";
-
         const number1 = parseFloat(num1);
         const number2 = parseFloat(num2);
 
@@ -67,16 +73,21 @@
           return "Error";
         }
 
+        const DIVIDE = "/";
+        const MULTIPLY = "*";
+        const ADD = "+";
+        const MINUS = "-";
+
         if (op === DIVIDE && number2 === 0) {
           console.error(`Attempted to divide by zero.`);
           return `Error: Cannot divide by 0`;
         }
 
-        if (op === PLUS) {
+        if (op === ADD) {
           return add(number1, number2);
         } else if (op === MINUS) {
           return subtract(number1, number2);
-        } else if (op === TIMES) {
+        } else if (op === MULTIPLY) {
           return multiply(number1, number2);
         } else if (op === DIVIDE) {
           return divide(number1, number2);
@@ -84,10 +95,79 @@
           console.error(`Unknown operator: '${op}'`);
           return `Error: Invalid Operator`;
         }
-
-        return `${first} + ${operator} + ${last}`;
       }
-      console.log(operate("20", "/", "10"));
+      console.log(operate("200", "*", "10"));
+
+      function updateDisplay(value) {
+        display.textContent = value;
+      }
+
+      function clearCalculator() {
+        firstValue = "";
+        lastValue = "";
+        operator = "";
+        result = null;
+        updateDisplay("0");
+      }
+
+      calcBtns.forEach((button) => {
+        button.addEventListener("click", function (e) {
+          const buttonText = button.textContent;
+          //to handle clearing of the calculator
+          if (button.classList.contains("clear")) {
+            clearCalculator();
+            return;
+          }
+
+          if (button.classList.contains("equals")) {
+            if (firstValue !== "" && operator !== "" && lastValue !== "") {
+              result = operate(firstValue, operator, lastValue);
+              updateDisplay(result);
+
+              //handle errors and reset for new calculation or chain
+              if (result.toString().startsWith(`Error`)) {
+                setTimeout(clearCalculator, 1500);
+              } else {
+                firstValue = result.toString();
+                operator = "";
+                lastValue = "";
+              }
+            }
+            return;
+          }
+
+          if (button.classList.contains("operator")) {
+            if (firstValue !== "" && operator === "") {
+              operator = buttonText;
+              updateDisplay(firstValue + " " + operator);
+              return;
+            }
+
+            if (firstValue !== "" && operator !== "" && lastValue !== "") {
+              result = operate(firstValue, operator, lastValue);
+              updateDisplay(result);
+
+              if (result.toString().startsWith(`Error`)) {
+                setTimeout(clearCalculator, 1500);
+              } else {
+                firstValue = result.toString();
+                operator = buttonText;
+                lastValue = "";
+                updateDisplay(firstValue + " " + operator);
+              }
+              return;
+            }
+          }
+
+          if (operator === "") {
+            firstValue += buttonText;
+            updateDisplay(firstValue);
+          } else {
+            lastValue += buttonText;
+            updateDisplay(firstValue + " " + operator + " " + lastValue);
+          }
+        });
+      });
     </script>
   </body>
 </html>
