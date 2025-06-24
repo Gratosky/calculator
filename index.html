@@ -160,6 +160,13 @@
           }
 
           if (operator === "") {
+            if (result !== null) {
+              firstValue = "";
+              operator = "";
+              lastValue = "";
+              updateDisplay(firstValue + " " + operator + " " + lastValue);
+            }
+
             firstValue += buttonText;
             updateDisplay(firstValue);
           } else {
